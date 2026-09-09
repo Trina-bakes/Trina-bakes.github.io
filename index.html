@@ -206,88 +206,59 @@
 <button id="topBtn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-  let globalData = { likes: 0, visits: 0 };
-  let isLiked = false;
-
-  // Load data from data.json
-  async function loadData() {
-    try {
-      const response = await fetch('data.json');
-      globalData = await response.json();
-      document.getElementById('likeCount').textContent = globalData.likes;
-      document.getElementById('visitCount').textContent = globalData.visits;
-    } catch (error) {
-      console.log('Using default data');
-      document.getElementById('likeCount').textContent = '0';
-      document.getElementById('visitCount').textContent = '0';
-    }
+  // Simple local storage system - saves everything on YOUR device
+  
+  function initVisitCounter() {
+    let visits = localStorage.getItem('shiok-pan-visits') || '0';
+    visits = parseInt(visits) + 1;
+    localStorage.setItem('shiok-pan-visits', visits);
+    document.getElementById('visitCount').textContent = visits;
   }
 
-  // Update data in data.json
-  async function updateData() {
-    try {
-      // This will update via GitHub API (requires authentication)
-      // For now, we'll use localStorage as backup
-      const formData = new FormData();
-      formData.append('data', JSON.stringify(globalData));
-      
-      const response = await fetch('/api/update-data', {
-        method: 'POST',
-        body: formData
-      });
-      
-      console.log('Data updated');
-    } catch (error) {
-      console.log('Storing in local backup');
-      localStorage.setItem('shiok-pan-backup', JSON.stringify(globalData));
-    }
-  }
-
-  // Initialize counters and buttons
-  function initializeApp() {
+  function initLikeButton() {
     const likeBtn = document.getElementById('likeBtn');
+    const likeCount = document.getElementById('likeCount');
+    let likes = localStorage.getItem('shiok-pan-likes') || '0';
+    let isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
     
-    // Check localStorage for like state
-    isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
+    likeCount.textContent = likes;
+    
     if (isLiked) {
       likeBtn.textContent = '❤️';
       likeBtn.classList.add('liked');
     }
-
-    // Like button click handler
+    
     likeBtn.addEventListener('click', function() {
       isLiked = !isLiked;
+      likes = parseInt(likes);
       
       if (isLiked) {
-        globalData.likes++;
+        likes++;
         likeBtn.textContent = '❤️';
         likeBtn.classList.add('liked');
         localStorage.setItem('shiok-pan-liked', 'true');
       } else {
-        globalData.likes--;
+        likes--;
         likeBtn.textContent = '🤍';
         likeBtn.classList.remove('liked');
         localStorage.setItem('shiok-pan-liked', 'false');
       }
       
-      document.getElementById('likeCount').textContent = globalData.likes;
-      updateData();
+      likeCount.textContent = likes;
+      localStorage.setItem('shiok-pan-likes', likes);
     });
   }
+
+  // Initialize on page load
+  window.addEventListener('load', function() {
+    initVisitCounter();
+    initLikeButton();
+  });
 
   // Back to top button
   const topBtn = document.getElementById('topBtn');
   window.addEventListener('scroll', () => {
     topBtn.classList.toggle('show', window.scrollY > 500);
-  });
-
-  // Initialize on page load
-  window.addEventListener('load', function() {
-    loadData();
-    globalData.visits++;
-    document.getElementById('visitCount').textContent = globalData.visits;
-    updateData();
-    initializeApp();
   });
 </script>
 
