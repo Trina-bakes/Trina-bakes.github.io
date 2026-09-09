@@ -206,122 +206,88 @@
 <button id="topBtn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-  // Google Sheet ID and API
-  const SHEET_ID = '12IG-0Dwp6jxH9jYHoo_HSUKjMSNmLGwlZfe0j1jLJXY';
-  const SHEET_NAME = 'Sheet1';
-  
-  // Convert Sheet to CSV URL for reading
-  const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-  
-  // Get your device ID (unique to this browser)
-  function getDeviceId() {
-    let deviceId = localStorage.getItem('device-id');
-    if (!deviceId) {
-      deviceId = 'device-' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('device-id', deviceId);
-    }
-    return deviceId;
-  }
-  
-  // Read data from Google Sheet
-  async function readSheetData() {
+  let globalData = { likes: 0, visits: 0 };
+  let isLiked = false;
+
+  // Load data from data.json
+  async function loadData() {
     try {
-      const response = await fetch(csvUrl);
-      const text = await response.text();
-      const lines = text.trim().split('\n');
+      const response = await fetch('data.json');
+      globalData = await response.json();
+      document.getElementById('likeCount').textContent = globalData.likes;
+      document.getElementById('visitCount').textContent = globalData.visits;
+    } catch (error) {
+      console.log('Using default data');
+      document.getElementById('likeCount').textContent = '0';
+      document.getElementById('visitCount').textContent = '0';
+    }
+  }
+
+  // Update data in data.json
+  async function updateData() {
+    try {
+      // This will update via GitHub API (requires authentication)
+      // For now, we'll use localStorage as backup
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(globalData));
       
-      if (lines.length > 1) {
-        const data = lines[1].split(',');
-        return {
-          likes: parseInt(data[0]) || 0,
-          visits: parseInt(data[1]) || 0
-        };
-      }
-      return { likes: 0, visits: 0 };
+      const response = await fetch('/api/update-data', {
+        method: 'POST',
+        body: formData
+      });
+      
+      console.log('Data updated');
     } catch (error) {
-      console.log('Could not load from sheet, using local data');
-      return null;
+      console.log('Storing in local backup');
+      localStorage.setItem('shiok-pan-backup', JSON.stringify(globalData));
     }
   }
-  
-  // Update Google Sheet (simplified - uses Form submission)
-  async function updateSheet(likes, visits) {
-    try {
-      const formUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
-      // Note: Direct sheet updates require authentication
-      // For now, we'll update locally and you can see the data in your sheet
-      console.log(`Likes: ${likes}, Visits: ${visits}`);
-    } catch (error) {
-      console.log('Could not update sheet');
-    }
-  }
-  
-  // Initialize counters
-  async function initCounters() {
-    // Read from sheet
-    const sheetData = await readSheetData();
-    
-    let likes = localStorage.getItem('shiok-pan-likes') || '0';
-    let visits = localStorage.getItem('shiok-pan-visits') || '0';
-    let isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
-    
-    // If sheet has data, use it
-    if (sheetData) {
-      likes = sheetData.likes;
-      visits = sheetData.visits;
-    }
-    
-    // Increment visits
-    visits = parseInt(visits) + 1;
-    localStorage.setItem('shiok-pan-visits', visits);
-    localStorage.setItem('shiok-pan-likes', likes);
-    
-    // Update display
-    document.getElementById('likeCount').textContent = likes;
-    document.getElementById('visitCount').textContent = visits;
-    
-    // Set like button state
+
+  // Initialize counters and buttons
+  function initializeApp() {
     const likeBtn = document.getElementById('likeBtn');
+    
+    // Check localStorage for like state
+    isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
     if (isLiked) {
       likeBtn.textContent = '❤️';
       likeBtn.classList.add('liked');
     }
-    
+
     // Like button click handler
     likeBtn.addEventListener('click', function() {
       isLiked = !isLiked;
-      likes = parseInt(likes);
       
       if (isLiked) {
-        likes++;
+        globalData.likes++;
         likeBtn.textContent = '❤️';
         likeBtn.classList.add('liked');
         localStorage.setItem('shiok-pan-liked', 'true');
       } else {
-        likes--;
+        globalData.likes--;
         likeBtn.textContent = '🤍';
         likeBtn.classList.remove('liked');
         localStorage.setItem('shiok-pan-liked', 'false');
       }
       
-      document.getElementById('likeCount').textContent = likes;
-      localStorage.setItem('shiok-pan-likes', likes);
-      updateSheet(likes, visits);
+      document.getElementById('likeCount').textContent = globalData.likes;
+      updateData();
     });
-    
-    // Update sheet with new data
-    updateSheet(likes, visits);
   }
-  
-  // Initialize on page load
-  window.addEventListener('load', function() {
-    initCounters();
-  });
-  
+
   // Back to top button
   const topBtn = document.getElementById('topBtn');
   window.addEventListener('scroll', () => {
     topBtn.classList.toggle('show', window.scrollY > 500);
+  });
+
+  // Initialize on page load
+  window.addEventListener('load', function() {
+    loadData();
+    globalData.visits++;
+    document.getElementById('visitCount').textContent = globalData.visits;
+    updateData();
+    initializeApp();
   });
 </script>
 
