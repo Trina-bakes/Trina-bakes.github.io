@@ -206,8 +206,9 @@
 <button id="topBtn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-  // Simple local storage system - saves everything on YOUR device
-  
+  let likes = 0;
+  let isLiked = false;
+
   function initVisitCounter() {
     let visits = localStorage.getItem('shiok-pan-visits') || '0';
     visits = parseInt(visits) + 1;
@@ -218,9 +219,12 @@
   function initLikeButton() {
     const likeBtn = document.getElementById('likeBtn');
     const likeCount = document.getElementById('likeCount');
-    let likes = localStorage.getItem('shiok-pan-likes') || '0';
-    let isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
     
+    // Load likes from storage
+    likes = parseInt(localStorage.getItem('shiok-pan-likes') || '0');
+    isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
+    
+    // Display current state
     likeCount.textContent = likes;
     
     if (isLiked) {
@@ -229,23 +233,25 @@
     }
     
     likeBtn.addEventListener('click', function() {
-      isLiked = !isLiked;
-      likes = parseInt(likes);
-      
       if (isLiked) {
-        likes++;
-        likeBtn.textContent = '❤️';
-        likeBtn.classList.add('liked');
-        localStorage.setItem('shiok-pan-liked', 'true');
-      } else {
-        likes--;
+        // Unlike
+        likes = Math.max(0, likes - 1);
         likeBtn.textContent = '🤍';
         likeBtn.classList.remove('liked');
+        isLiked = false;
         localStorage.setItem('shiok-pan-liked', 'false');
+      } else {
+        // Like
+        likes = likes + 1;
+        likeBtn.textContent = '❤️';
+        likeBtn.classList.add('liked');
+        isLiked = true;
+        localStorage.setItem('shiok-pan-liked', 'true');
       }
       
-      likeCount.textContent = likes;
+      // Save likes to storage
       localStorage.setItem('shiok-pan-likes', likes);
+      likeCount.textContent = likes;
     });
   }
 
