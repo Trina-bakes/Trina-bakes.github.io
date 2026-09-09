@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trina's shiok-pan 🥐</title>
+<style>
+  :root{
+    --cream:#fffaf1; --paper:#fffdf8; --brown:#5b4032; --gold:#c89455;
+    --soft:#f5e8d4; --pink:#ead4cf; --shadow:0 12px 35px rgba(91,64,50,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--cream);color:var(--brown);font-family:Georgia,"Times New Roman",serif;line-height:1.65}
+  nav{position:sticky;top:0;z-index:10;background:rgba(255,250,241,.94);backdrop-filter:blur(10px);border-bottom:1px solid #eadfce;padding:14px 6%;display:flex;justify-content:space-between;align-items:center}
+  .brand{font-weight:bold;font-size:1.15rem}
+  nav a{color:var(--brown);text-decoration:none;margin-left:20px;font-size:.95rem}
+  .nav-right{display:flex;align-items:center;gap:15px}
+  .like-btn{background:none;border:none;font-size:1.8rem;cursor:pointer;transition:transform 0.2s;padding:5px}
+  .like-btn:hover{transform:scale(1.2)}
+  .like-btn.liked{animation:heartbeat 0.6s}
+  @keyframes heartbeat{0%{transform:scale(1)}25%{transform:scale(1.3)}50%{transform:scale(1.1)}}
+  .like-count{font-size:0.9rem;color:var(--brown);min-width:30px}
+  .visit-count{font-size:0.85rem;color:#876f60}
+  .hero{min-height:72vh;display:grid;place-items:center;text-align:center;padding:70px 7%;background:radial-gradient(circle at 50% 35%,#fff 0,#fff8ed 45%,#f4e4ce 100%)}
+  .bun{font-size:5rem;animation:float 3s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-8px) rotate(2deg)}}
+  h1{font-size:clamp(3rem,9vw,6.5rem);line-height:1;margin:15px 0 12px;letter-spacing:-.04em}
+  .tagline{font-size:1.25rem;font-style:italic;margin-bottom:28px}
+  .button{display:inline-block;background:var(--brown);color:white;padding:12px 24px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif;font-weight:700}
+  main{max-width:1050px;margin:auto;padding:65px 6%}
+  section{margin-bottom:80px}
+  .eyebrow{text-transform:uppercase;letter-spacing:.18em;font:700 .78rem Arial,sans-serif;color:var(--gold)}
+  h2{font-size:2.5rem;margin:8px 0 28px;line-height:1.1}
+  .intro{font-size:1.1rem;max-width:720px}
+  .ingredients{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .ingredient{background:var(--paper);padding:20px;border-radius:18px;box-shadow:var(--shadow);border:1px solid #eee2d1}
+  .ingredient strong{display:block;font-size:1.25rem}
+  .tip{background:var(--soft);padding:22px 24px;border-radius:20px;margin-top:18px}
+  .steps{display:grid;gap:18px}
+  .step{background:var(--paper);border:1px solid #eee2d1;border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+  .num{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--pink);font-weight:bold;margin-bottom:10px}
+  .step h3{margin:0 0 7px;font-size:1.35rem}
+  .step p{margin:0}
+  .checklist{background:#fff;border:1px solid #eee2d1;border-radius:22px;padding:25px;box-shadow:var(--shadow)}
+  .checklist label{display:block;padding:9px 0}
+  input{accent-color:var(--brown);margin-right:10px}
+  footer{text-align:center;padding:50px 20px;background:#f0dfc8}
+  .big{font-size:1.7rem;font-weight:bold}
+  @media(max-width:650px){nav{align-items:flex-start;flex-direction:column;gap:10px}.brand{min-width:max-content}nav{overflow:hidden}.nav-links{max-width:55vw}.nav-links a{font-size:.82rem;margin-left:6px}.print-btn{font-size:.78rem;padding:6px 9px}.hero{min-height:65vh}h2{font-size:2.1rem}.nav-right{flex-direction:column;width:100%;gap:8px}}
+
+  .nav-links{display:flex;align-items:center;gap:5px;overflow-x:auto;white-space:nowrap;padding:3px 0}.nav-links a{margin-left:10px}
+  .recipe-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:25px 0 28px}
+  .recipe-meta div{background:#fff;border:1px solid #eee2d1;border-radius:18px;padding:17px;text-align:center;box-shadow:var(--shadow)}
+  .recipe-meta span{display:block;font-size:1.5rem}.recipe-meta b{display:block;font:700 .9rem Arial,sans-serif}.recipe-meta small{display:block;margin-top:3px;font: .78rem Arial,sans-serif;color:#876f60}
+  .prep-grid,.notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .prep-card,.note-card{background:var(--paper);border:1px solid #eee2d1;border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+  .prep-card b,.note-card b{font-size:1.1rem}.prep-card p,.note-card p{margin-bottom:0}
+  details{background:#fff;border:1px solid #eee2d1;border-radius:16px;padding:17px 20px;margin:12px 0}
+  summary{cursor:pointer;font-weight:bold}.print-btn{border:1px solid #d8c5ae;background:transparent;color:var(--brown);border-radius:999px;padding:7px 12px;margin-left:15px;cursor:pointer;font:inherit}
+  @media(max-width:760px){.recipe-meta{grid-template-columns:repeat(2,1fr)}.prep-grid,.notes-grid{grid-template-columns:1fr}}
+  @media print{nav,.button,.print-btn,footer{display:none!important}.hero{min-height:auto;padding:30px}.step,.ingredient,.tip,.prep-card,.note-card{box-shadow:none;break-inside:avoid}body{background:white}main{padding-top:20px}}
+
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">🥐 Trina's shiok-pan</div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#recipe">🧺 Ingredients</a>
+      <a href="#method">👩🏻‍🍳 Method</a>
+      <a href="#tips">💡 Tips</a>
+      <a href="#faq">💬 FAQ</a>
+      <a href="#checklist">✅ Checklist</a>
+      <button class="print-btn" onclick="window.print()">🖨 Print</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="like-btn" id="likeBtn" title="Love this recipe!">🤍</button>
+      <span class="like-count" id="likeCount">0</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="bun">🥐</div>
+    <div class="eyebrow">A little salty • a lot shiok</div>
+    <h1>Trina's<br>shiok-pan</h1>
+    <p class="tagline">Buttery. Crispy. Fluffy. Absolutely shiok.</p>
+    <p class="visit-count">👀 <span id="visitCount">0</span> visits</p>
+    <a class="button" href="#recipe">Let's bake →</a>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="eyebrow">Welcome to my bakery</div>
+  <h2>A Singaporean twist on a Japanese favourite.</h2>
+  <p class="intro">These shio pans are crispy and golden on the outside, soft and fluffy on the inside, with a glorious buttery centre and a salty finish. Made with butter, patience, and just a little bit of chaos. 🧈🥐</p>
+</section>
+
+<section id="recipe">
+  <div class="eyebrow">The recipe</div>
+  <h2>What you'll need 🧺</h2>
+  <div class="recipe-meta">
+    <div><span>⏱</span><b>Active time</b><small>About 1 hour</small></div>
+    <div><span>🌙</span><b>Proofing</b><small>Overnight + final proofs</small></div>
+    <div><span>🔥</span><b>Bake</b><small>200°C • 20 min</small></div>
+    <div><span>🥐</span><b>Yield</b><small>12 shio pans</small></div>
+  </div>
+  <div class="ingredients">
+    <div class="ingredient"><strong>530 g</strong>Bread flour</div>
+    <div class="ingredient"><strong>410 g</strong>Cold milk</div>
+    <div class="ingredient"><strong>8 g</strong>Yeast</div>
+    <div class="ingredient"><strong>10 g</strong>Pink Himalayan rock salt</div>
+    <div class="ingredient"><strong>31 g</strong>White sugar</div>
+    <div class="ingredient"><strong>12 × 15 g</strong>Unsalted butter</div>
+    <div class="ingredient"><strong>As needed</strong>Salt flakes</div>
+  </div>
+  <div class="tip"><b>💧 For handling:</b> Keep some water nearby to lightly wet your hands when the dough gets sticky. The water is not part of the dough!</div>
+</section>
+
+<section>
+  <div class="eyebrow">Before you start</div>
+  <h2>Your baking station 🧑🏻‍🍳</h2>
+  <div class="prep-grid">
+    <div class="prep-card"><b>🧰 Equipment</b><p>Stand mixer, mixing bowl, clean work surface, rolling pin, kitchen scale, baking tray, cling wrap, oven, and a water spray bottle if available.</p></div>
+    <div class="prep-card"><b>🧊 A little prep</b><p>Have your butter ready to portion and chill. Keep the milk cold, and make sure there is enough space in your container for the dough to expand.</p></div>
+    <div class="prep-card"><b>📏 Portion guide</b><p>Aim for 12 portions of about 80 g each. Small differences are okay because a little dough can be lost during handling.</p></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="eyebrow">Step by step</div>
+  <h2>Let's make some shiok-pan 👩🏻‍🍳</h2>
+  <div class="steps">
+    <article class="step"><div class="num">01</div><h3>Dump it all in!</h3><p>Add bread flour, salt, sugar and yeast to the stand mixer bowl. Add the cold milk last.</p></article>
+    <article class="step"><div class="num">02</div><h3>Let the mixer do the work.</h3><p>Set the stand mixer to Speed 2 and knead for 10 minutes.</p></article>
+    <article class="step"><div class="num">03</div><h3>Slap, stretch & fold.</h3><p>Clean your work surface and place the dough down. Stretch and fold it, giving it a few good slaps against the table to help it come together.</p></article>
+    <article class="step"><div class="num">04</div><h3>First proof + stretch & fold.</h3><p>Proof for 15 minutes. Then stretch and fold from all four sides towards the centre. Let it rest again.</p></article>
+    <article class="step"><div class="num">05</div><h3>Round two!</h3><p>Let the dough proof again, then perform the second stretch and fold.</p></article>
+    <article class="step"><div class="num">06</div><h3>Overnight beauty sleep 🌙</h3><p>Cover with cling wrap, leaving room for the dough to grow. Proof overnight until doubled, then place it in the fridge.</p></article>
+    <article class="step"><div class="num">07</div><h3>Divide & conquer.</h3><p>Take the dough out of the fridge and divide into 12 portions of about 80 g each.</p></article>
+    <article class="step"><div class="num">08</div><h3>Give them a little rest.</h3><p>Shape each portion into a circular ball and proof for 15 minutes, or until approximately doubled in size.</p></article>
+    <article class="step"><div class="num">09</div><h3>Get your butter ready 🧈</h3><p>Cut the butter into 12 pieces of 15 g each and return them to the freezer so they stay cold.</p></article>
+    <article class="step"><div class="num">10</div><h3>Shape the dough.</h3><p>Roll each dough ball so one end is thinner and the other is thicker, creating an elongated inverted-triangle shape.</p></article>
+    <article class="step"><div class="num">11</div><h3>Butter goes in!</h3><p>Place one 15 g piece of cold butter at the wide end. Roll tightly from the wide end towards the thin end to form your shio pan.</p></article>
+    <article class="step"><div class="num">12</div><h3>One last proof.</h3><p>Preheat the oven to 200°C with top and bottom heating for 25 minutes. While it preheats, let the shaped shio pans proof until doubled.</p></article>
+    <article class="step"><div class="num">13</div><h3>The finishing touch ✨</h3><p>Lightly mist the shio pans with water and sprinkle salt flakes over the tops.</p></article>
+    <article class="step"><div class="num">14</div><h3>BAKE! 🔥</h3><p>Bake at 200°C for 20 minutes, until the butter has caramelised around the bread and the tops are beautifully golden brown.</p></article>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="eyebrow">Baker's tips</div>
+  <h2>Little tricks for better bread 💡</h2>
+  <div class="tip"><b>💦 No water spray bottle?</b><br>Place an oven-safe tray at the bottom of the oven while preheating. When you start baking, carefully add ice cubes to the hot tray and immediately close the oven door. The steam helps create a lovely crust.</div>
+  <div class="tip"><b>🧈 Keep your butter COLD.</b><br>Return the butter pieces to the freezer while you work with the dough. Cold butter helps keep the buttery centre in place while shaping.</div>
+  <div class="tip"><b>💧 Sticky dough?</b><br>Lightly wet your hands with water before handling the dough. Just a little moisture is enough!</div>
+</section>
+
+<section>
+  <div class="eyebrow">Recipe notes</div>
+  <h2>Good to know 📖</h2>
+  <div class="notes-grid">
+    <div class="note-card"><b>🥐 What is shio pan?</b><p>"Shio" means salt in Japanese. Shio pan is a soft bread known for its buttery centre and salty, crisp finish.</p></div>
+    <div class="note-card"><b>🧈 The butter trick</b><p>The butter tucked inside melts during baking, helping create the signature rich centre and buttery base.</p></div>
+    <div class="note-card"><b>⏳ Don't rush the dough</b><p>Proofing times can vary with temperature and dough conditions. Use the dough's size and appearance as your guide.</p></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="eyebrow">Frequently asked</div>
+  <h2>FAQ 💬</h2>
+  <details><summary>Can I make these without a stand mixer?</summary><p>Yes, you can knead by hand, but expect it to take longer. Focus on developing a smooth, stretchy dough.</p></details>
+  <details><summary>Why is my dough so dry?</summary><p>If your dough feels unusually dry or difficult to bring together, check that all the milk was added and that the flour was measured accurately. Flour can absorb liquid differently depending on the environment. Avoid adding lots of extra flour while kneading — lightly wet your hands if the dough is sticking.</p></details>
+  <details><summary>Why is my dough not proofing?</summary><p>Proofing can be slower when the dough or room is cool. Give the dough more time and look for an increase in size rather than relying only on the clock. Also check that your yeast is still active and that the dough has been covered so it does not dry out.</p></details>
+  <details><summary>Why is the milk cold?</summary><p>Cold milk helps keep the dough temperature from rising too quickly during mixing.</p></details>
+  <details><summary>Why does the butter need to stay cold?</summary><p>Cold butter is easier to wrap inside the dough and helps keep the filling where you want it during shaping.</p></details>
+  <details><summary>How do I know the dough has doubled?</summary><p>Look for a clear increase in volume rather than relying only on the clock. Room temperature can change proofing speed.</p></details>
+</section>
+
+<section id="checklist">
+  <div class="eyebrow">Ready to bake?</div>
+  <h2>My shiok-pan checklist ✅</h2>
+  <div class="checklist">
+    <label><input type="checkbox"> Ingredients measured</label>
+    <label><input type="checkbox"> Dough kneaded</label>
+    <label><input type="checkbox"> Stretch & folds done</label>
+    <label><input type="checkbox"> Overnight proof complete</label>
+    <label><input type="checkbox"> Butter cut and chilled</label>
+    <label><input type="checkbox"> Shio pans shaped</label>
+    <label><input type="checkbox"> Oven preheated to 200°C</label>
+    <label><input type="checkbox"> Salt flakes added</label>
+    <label><input type="checkbox"> 20-minute bake complete</label>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="big">That's not just shio pan.</div>
+  <div class="big">That's <i>shiok-pan.</i> 🇸🇬🥐</div>
+  <p>Made with butter, patience & a little bit of chaos.</p>
+</footer>
+<button id="topBtn" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Visit counter
+  function initVisitCounter() {
+    let visits = localStorage.getItem('shiok-pan-visits') || '0';
+    visits = parseInt(visits) + 1;
+    localStorage.setItem('shiok-pan-visits', visits);
+    document.getElementById('visitCount').textContent = visits;
+  }
+
+  // Like button
+  function initLikeButton() {
+    const likeBtn = document.getElementById('likeBtn');
+    const likeCount = document.getElementById('likeCount');
+    let likes = localStorage.getItem('shiok-pan-likes') || '0';
+    let isLiked = localStorage.getItem('shiok-pan-liked') === 'true';
+    
+    likeCount.textContent = likes;
+    
+    if (isLiked) {
+      likeBtn.textContent = '❤️';
+      likeBtn.classList.add('liked');
+    }
+    
+    likeBtn.addEventListener('click', function() {
+      isLiked = !isLiked;
+      likes = parseInt(likes);
+      
+      if (isLiked) {
+        likes++;
+        likeBtn.textContent = '❤️';
+        likeBtn.classList.add('liked');
+        localStorage.setItem('shiok-pan-liked', 'true');
+      } else {
+        likes--;
+        likeBtn.textContent = '🤍';
+        likeBtn.classList.remove('liked');
+        localStorage.setItem('shiok-pan-liked', 'false');
+      }
+      
+      likeCount.textContent = likes;
+      localStorage.setItem('shiok-pan-likes', likes);
+    });
+  }
+
+  // Initialize on page load
+  window.addEventListener('load', function() {
+    initVisitCounter();
+    initLikeButton();
+  });
+
+  // Back to top button
+  const topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', () => {
+    topBtn.classList.toggle('show', window.scrollY > 500);
+  });
+</script>
+
+</body>
+</html>
